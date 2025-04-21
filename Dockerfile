@@ -39,6 +39,9 @@ RUN addgroup -g $USER_GID $USERNAME && \
 # Set the working directory
 WORKDIR /home/$USERNAME
 
+
+RUN cp /usr/share/cmake/Modules/Platform/Generic.cmake /usr/share/cmake/Modules/Platform/amiga-elf.cmake
+
 # Switch to the non-root user
 USER $USERNAME
 
@@ -53,11 +56,12 @@ RUN wget https://github.com/BartmanAbyss/vscode-amiga-debug/releases/download/1.
     && rm -rf bartman-extension \
     && rm amiga-debug-1.7.9.vsix
 
-RUN chmod -R 755 /home/$USERNAME/.vscode/extensions/bartmanabyss.amiga-debug-1.7.9
+RUN chmod -R 755 /home/$USERNAME/.vscode/extensions/bartmanabyss.amiga-debug-1.7.9/bin/linux
 
-RUN cp /usr/share/cmake/Modules/Generic.cmake /usr/share/cmake/Modules/amiga-elf.cmake
+
 # Set environment variables
 ENV PATH="/home/$USERNAME/.local/bin:${PATH}"
+ENV VSCODE_AMIGA_EXTENSION_PATH=/home/$USERNAME/.vscode/extensions/bartmanabyss.amiga-debug-1.7.9
 
 # Create projects directory
 RUN mkdir -p /home/$USERNAME/projects
